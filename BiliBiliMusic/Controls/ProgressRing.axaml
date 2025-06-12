@@ -1,0 +1,93 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:BiliBiliMusic.Controls">
+    <controls:FitSquarelyWithinAspectRatioConverter x:Key="FitSquarelyWithinAspectRatioConverter"/>
+    
+    <ControlTheme x:Key="{x:Type controls:ProgressRing}" TargetType="controls:ProgressRing">
+        <Setter Property="Foreground" Value="{DynamicResource AccentFillColorDefaultBrush}"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="6" />
+        <Setter Property="MinHeight" Value="24" />
+        <Setter Property="MinWidth" Value="24" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel x:Name="PART_RingRoot">
+                    <Ellipse x:Name="PART_RingRootTrack"
+                             Stroke="{TemplateBinding Background}"
+                             StrokeThickness="{Binding BorderThickness.Left, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                    <Arc x:Name="PART_RingRootFill"
+                         Stroke="{TemplateBinding Foreground}"
+                         StrokeThickness="{Binding BorderThickness.Left, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                         StrokeLineCap="Round" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:not(:indeterminate) /template/ Arc#PART_RingRootFill">
+            <Setter Property="StartAngle" Value="{Binding StartAngle, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+            <Setter Property="SweepAngle" Value="{Binding ValueAngle, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+        </Style>
+        <Style Selector="^:preserveAspect">
+            <Setter Property="MinWidth" Value="32" />
+            <Setter Property="MinHeight" Value="32" />
+        </Style>
+        <Style Selector="^:preserveAspect /template/ Panel#PART_RingRoot">
+            <Setter Property="Width" Value="{TemplateBinding Bounds, Converter={StaticResource FitSquarelyWithinAspectRatioConverter}}"/>
+            <Setter Property="Height" Value="{Binding Width, RelativeSource={RelativeSource Mode=Self}}"/>
+        </Style>
+        <Style Selector="^[IsEnabled=True]:indeterminate /template/ Arc#PART_RingRootFill">
+            <Style.Animations>
+                <Animation Duration="0:0:3" Easing="LinearEasing" IterationCount="INFINITE" FillMode="Both">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="StartAngle" Value="-720"/>
+                        <Setter Property="SweepAngle" Value="0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="12.5%">
+                        <Setter Property="StartAngle" Value="-540"/>
+                        <Setter Property="SweepAngle" Value="50"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="25%">
+                        <Setter Property="StartAngle" Value="-360"/>
+                        <Setter Property="SweepAngle" Value="100"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="32.5%">
+                        <Setter Property="StartAngle" Value="-180"/>
+                        <Setter Property="SweepAngle" Value="50"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="50%">
+                        <Setter Property="StartAngle" Value="0"/>
+                        <Setter Property="SweepAngle" Value="5"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="62.5%">
+                        <Setter Property="StartAngle" Value="180"/>
+                        <Setter Property="SweepAngle" Value="50"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="75%">
+                        <Setter Property="StartAngle" Value="360"/>
+                        <Setter Property="SweepAngle" Value="100"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="87.5%">
+                        <Setter Property="StartAngle" Value="540"/>
+                        <Setter Property="SweepAngle" Value="50"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="StartAngle" Value="720"/>
+                        <Setter Property="SweepAngle" Value="0"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^[IsEnabled=True] /template/ Ellipse#PART_RingRootTrack">
+            <Style.Animations>
+                <Animation Duration="0:0:1" IterationCount="INFINITE">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.99"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

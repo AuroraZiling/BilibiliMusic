@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>none</DebugType>
+        <DebugSymbols>false</DebugSymbols>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+        <DirectPInvoke Include="av_libglesv2"/>
+        <NativeLibrary Include="lib\av_libglesv2.lib" Condition="$(RuntimeIdentifier.StartsWith('win'))"/>
+        <DirectPInvoke Include="libHarfBuzzSharp"/>
+        <NativeLibrary Include="lib\libHarfBuzzSharp.lib" Condition="$(RuntimeIdentifier.StartsWith('win'))"/>
+        <DirectPInvoke Include="libSkiaSharp"/>
+        <NativeLibrary Include="lib\libSkiaSharp.lib" Condition="$(RuntimeIdentifier.StartsWith('win'))"/>
+        <LinkerArg Include="/LTCG" Condition="$(RuntimeIdentifier.StartsWith('win'))"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.1"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.1"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.1"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1"/>
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.1">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+        <PackageReference Include="Lucide.Avalonia" Version="0.1.32" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="lib\" />
+    </ItemGroup>
+</Project>

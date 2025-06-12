@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="BiliBiliMusic/App.axaml" value="BiliBiliMusic/BiliBiliMusic.csproj" />
+        <entry key="BiliBiliMusic/Controls/ProgressRing.axaml" value="BiliBiliMusic/BiliBiliMusic.csproj" />
+        <entry key="BiliBiliMusic/Controls/ResolveStatusCard.axaml" value="BiliBiliMusic/BiliBiliMusic.csproj" />
+        <entry key="BiliBiliMusic/Styles/BorderStyles.axaml" value="BiliBiliMusic/BiliBiliMusic.csproj" />
+        <entry key="BiliBiliMusic/Views/MainWindow.axaml" value="BiliBiliMusic/BiliBiliMusic.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

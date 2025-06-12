@@ -1,0 +1,117 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:BiliBiliMusic.Controls"
+        xmlns:models="clr-namespace:BiliBiliMusic.Models">
+    <ControlTheme
+        TargetType="controls:ResolveStatusCard"
+        x:Key="ResolveStatusCardTheme">
+        
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Panel.Styles>
+                        <Style Selector="Border.ResolveStatusCard">
+                            <Setter Property="BorderThickness" Value="2"></Setter>
+                            <Setter Property="CornerRadius" Value="8"></Setter>
+                            <Setter Property="Padding" Value="4"></Setter>
+                            
+                            <Style Selector="^ > StackPanel">
+                                <Setter Property="Orientation" Value="Horizontal"></Setter>
+                                <Setter Property="Margin" Value="4"></Setter>
+                                <Setter Property="Spacing" Value="8"></Setter>
+                            </Style>
+                        </Style>
+                    </Panel.Styles>
+                    
+                    <Border Classes="ResolveStatusCard"
+                            IsVisible="{TemplateBinding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ResolveStatus.Validating}}"
+                            BorderBrush="Orange">
+                        <StackPanel>
+                            <LucideIcon Kind="CircleAlert" Size="32" Foreground="Orange"></LucideIcon>
+                            <StackPanel>
+                                <TextBlock FontSize="16" Text="Validating" Foreground="Orange"></TextBlock>
+                                <TextBlock FontSize="12" Text="{TemplateBinding StatusDescription}" Foreground="Orange" Opacity="0.6"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Border Classes="ResolveStatusCard"
+                            IsVisible="{TemplateBinding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ResolveStatus.WaitForResolving}}"
+                            BorderBrush="Gray">
+                        <StackPanel>
+                            <LucideIcon Kind="CircleDashed" Size="32"></LucideIcon>
+                            <StackPanel>
+                                <TextBlock FontSize="16" Text="Wait for resolving"></TextBlock>
+                                <TextBlock FontSize="12" Text="{TemplateBinding StatusDescription}" Foreground="LightGray"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="ResolveStatusCard"
+                            IsVisible="{TemplateBinding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ResolveStatus.Resolving}}"
+                            BorderBrush="Orange">
+                        <StackPanel>
+                            <controls:ProgressRing Foreground="Orange" Width="32" Height="32" IsIndeterminate="True" BorderThickness="4"></controls:ProgressRing>
+                            <StackPanel>
+                                <TextBlock FontSize="16" Text="Resolving" Foreground="Orange"></TextBlock>
+                                <TextBlock FontSize="12" Text="{TemplateBinding StatusDescription}" Foreground="Orange" Opacity="0.6"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Border Classes="ResolveStatusCard"
+                            IsVisible="{TemplateBinding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ResolveStatus.ResolveFailed}}"
+                            BorderBrush="OrangeRed">
+                        <StackPanel>
+                            <LucideIcon Kind="CircleX" Size="32" Foreground="OrangeRed"></LucideIcon>
+                            <StackPanel>
+                                <TextBlock FontSize="16" Text="Resolve Failed" Foreground="OrangeRed"></TextBlock>
+                                <TextBlock FontSize="12" Text="{TemplateBinding StatusDescription}" Foreground="OrangeRed" Opacity="0.8"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Border Classes="ResolveStatusCard"
+                            IsVisible="{TemplateBinding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ResolveStatus.Downloading}}"
+                            BorderBrush="Orange">
+                        <StackPanel>
+                            <controls:ProgressRing Foreground="Orange" Width="32" Height="32" IsIndeterminate="True" BorderThickness="4"></controls:ProgressRing>
+                            <StackPanel>
+                                <TextBlock FontSize="16" Text="Downloading" Foreground="Orange"></TextBlock>
+                                <TextBlock FontSize="12" Text="{TemplateBinding StatusDescription}" Foreground="Orange" Opacity="0.6"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Border Classes="ResolveStatusCard"
+                            IsVisible="{TemplateBinding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ResolveStatus.Downloaded}}"
+                            BorderBrush="LimeGreen">
+                        <StackPanel>
+                            <LucideIcon Kind="CircleCheck" Size="32" Foreground="LimeGreen"></LucideIcon>
+                            <StackPanel>
+                                <TextBlock FontSize="16" Text="Downloaded" Foreground="LimeGreen"></TextBlock>
+                                <TextBlock FontSize="12" Text="{TemplateBinding StatusDescription}" Foreground="LimeGreen" Opacity="0.6"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Border Classes="ResolveStatusCard"
+                            IsVisible="{TemplateBinding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static models:ResolveStatus.DownloadFailed}}"
+                            BorderBrush="OrangeRed">
+                        <StackPanel>
+                            <LucideIcon Kind="CircleX" Size="32" Foreground="OrangeRed"></LucideIcon>
+                            <StackPanel>
+                                <TextBlock FontSize="16" Text="Download Failed" Foreground="OrangeRed"></TextBlock>
+                                <TextBlock FontSize="12" Text="{TemplateBinding StatusDescription}" Foreground="OrangeRed" Opacity="0.8"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+    <ControlTheme
+        BasedOn="{StaticResource ResolveStatusCardTheme}"
+        TargetType="controls:ResolveStatusCard"
+        x:Key="{x:Type controls:ResolveStatusCard}" />
+    
+</ResourceDictionary>

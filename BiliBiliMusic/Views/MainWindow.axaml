@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:BiliBiliMusic.ViewModels"
+        xmlns:controls="clr-namespace:BiliBiliMusic.Controls"
+        x:Class="BiliBiliMusic.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="550"
+        Height="280"
+        Icon="/Assets/avalonia-logo.ico"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ExtendClientAreaToDecorationsHint="True"
+        Title="BiliBili Music">
+    
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="1"
+                    MaterialOpacity="0.65" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        
+        <Grid RowDefinitions="30, *">
+            <TextBlock Grid.Row="0" IsHitTestVisible="False" Text="BiliBili Music" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8, 0, 0, 0"></TextBlock>
+            
+            <StackPanel Grid.Row="1" Margin="12, 10, 12, 0" Spacing="6">
+                <Grid ColumnDefinitions="75, *">
+                    <TextBlock Grid.Column="0" Text="URL" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Margin="8, 0, 0, 0"></TextBlock>
+                    <TextBox Margin="10, 0, 0, 0" Text="{Binding ResolveUrl, Mode=TwoWay}" Grid.Column="1" Watermark="https://www.bilibili.com/video/..."></TextBox>
+                </Grid>
+                <Grid ColumnDefinitions="75, *, Auto">
+                    <TextBlock Grid.Column="0" Text="Folder" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Margin="8, 0, 0, 0"></TextBlock>
+                    <TextBox Margin="8, 0" Text="{Binding StoreFolderPath, Mode=TwoWay}" Grid.Column="1"></TextBox>
+                    <Button Grid.Column="2" Command="{Binding BrowseCommand}">
+                        <LucideIcon Kind="FolderSearch" Size="18"></LucideIcon>
+                    </Button>
+                </Grid>
+                <Grid ColumnDefinitions="75, *, Auto">
+                    <TextBlock Grid.Column="0" Text="File Name" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="14" Margin="8, 0, 0, 0"></TextBlock>
+                    <TextBox Margin="8, 0" Text="{Binding FileName, Mode=TwoWay}" Grid.Column="1" IsEnabled="{Binding !IsAutoFileName}"></TextBox>
+                    <CheckBox Grid.Column="2" Content="Auto" IsChecked="{Binding IsAutoFileName}"></CheckBox>
+                </Grid>
+                <controls:ResolveStatusCard Margin="0, 24, 0, 0" Status="{Binding ResolveStatus}" StatusDescription="{Binding ResolveStatusDescription}"/>
+                <Button Command="{Binding DownloadCommand}" Content="Download" IsEnabled="{Binding IsAllValid}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"></Button>
+            </StackPanel>
+        </Grid>
+        
+    </Panel>
+</Window>
