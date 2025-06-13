@@ -9,12 +9,12 @@
         <LangVersion>preview</LangVersion>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
         <DebugType>none</DebugType>
         <DebugSymbols>false</DebugSymbols>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup Condition="'$(Configuration)|$(PublishAot)' == 'Release|true'">
         <DirectPInvoke Include="av_libglesv2"/>
         <NativeLibrary Include="lib\av_libglesv2.lib" Condition="$(RuntimeIdentifier.StartsWith('win'))"/>
         <DirectPInvoke Include="libHarfBuzzSharp"/>
@@ -44,6 +44,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="lib\" />
+      <ProjectReference Include="..\BiliBiliMusic.Core\BiliBiliMusic.Core.csproj" />
     </ItemGroup>
 </Project>

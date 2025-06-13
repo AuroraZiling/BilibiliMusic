@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls.Primitives;
-using BiliBiliMusic.Models;
+using BiliBiliMusic.Core.Models;
 
 namespace BiliBiliMusic.Controls;
 

@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:BiliBiliMusic.Controls"
-        xmlns:models="clr-namespace:BiliBiliMusic.Models">
+        xmlns:models="clr-namespace:BiliBiliMusic.Core.Models;assembly=BiliBiliMusic.Core">
     <ControlTheme
         TargetType="controls:ResolveStatusCard"
         x:Key="ResolveStatusCardTheme">

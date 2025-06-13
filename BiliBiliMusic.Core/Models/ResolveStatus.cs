@@ -1,4 +1,4 @@
-﻿namespace BiliBiliMusic.Models;
+﻿namespace BiliBiliMusic.Core.Models;
 
 public enum ResolveStatus
 {

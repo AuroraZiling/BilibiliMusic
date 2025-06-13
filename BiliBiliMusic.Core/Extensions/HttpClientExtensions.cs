@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace BiliBiliMusic.Extensions;
+﻿namespace BiliBiliMusic.Core.Extensions;
 
 public static class HttpClientExtensions
 {
@@ -17,11 +10,11 @@ public static class HttpClientExtensions
         public ulong TotalBytesToReceive { get; set; }
     }
 
-    public static async Task<byte[]> GetByteArrayAsync(this HttpClient client, string url, IProgress<HttpDownloadProgress> progress, CancellationToken cancellationToken)
+    public static async Task<byte[]> GetByteArrayAsync(this HttpClient client, HttpRequestMessage httpRequestMessage, IProgress<HttpDownloadProgress> progress, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(client);
 
-        using var responseMessage = await client.GetAsync(new Uri(url), HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+        using var responseMessage = await client.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
         responseMessage.EnsureSuccessStatusCode();
 
         var content = responseMessage.Content;

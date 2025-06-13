@@ -15,8 +15,6 @@ public partial class App : Application
     {
         AvaloniaXamlLoader.Load(this);
     }
-    
-    public static MainWindow MainWindow { get; private set; } = null!;
 
     public override void OnFrameworkInitializationCompleted()
     {
@@ -25,11 +23,9 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowViewModel(),
-            };
-            desktop.MainWindow = MainWindow;
+            var mainWindow = new MainWindow();
+            mainWindow.DataContext = new MainWindowViewModel(mainWindow.StorageProvider);
+            desktop.MainWindow = mainWindow;
         }
 
         base.OnFrameworkInitializationCompleted();

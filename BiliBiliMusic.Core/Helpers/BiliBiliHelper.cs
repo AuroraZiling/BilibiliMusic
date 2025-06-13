@@ -1,16 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using BiliBiliMusic.Extensions;
+using BiliBiliMusic.Core.Extensions;
 
-namespace BiliBiliMusic.Helpers;
+namespace BiliBiliMusic.Core.Helpers;
 
 public static partial class BiliBiliHelper
 {
@@ -60,9 +54,17 @@ public static partial class BiliBiliHelper
         return await response.Content.ReadAsStringAsync();
     }
 
-    public static async Task<bool> TestConnection(string url)
+    public static async Task<bool> TestConnection(string url, string videoId)
     {
-        var response = await HttpClient.GetAsync(url);
+        var response = await HttpClient.SendAsync(new HttpRequestMessage
+        {
+            RequestUri = new Uri($"https://www.bilibili.com/video/{videoId}"),
+            Method = HttpMethod.Get,
+            Headers =
+            {
+                {"Referer", $"https://www.bilibili.com/video/{videoId}"}
+            }
+        });
         return response.IsSuccessStatusCode;
     }
     
@@ -84,13 +86,21 @@ public static partial class BiliBiliHelper
             .GetProperty("audio")
             .EnumerateArray()
             .FirstOrDefault()
-            .GetProperty("baseUrl")
+            .GetProperty("base_url")
             .GetString();
     }
     
-    public static async Task DownloadAudioAsync(string audioUrl, string filePath, IProgress<HttpClientExtensions.HttpDownloadProgress> progress, CancellationToken cancellationToken)
+    public static async Task DownloadAudioAsync(string audioUrl, string videoId, string filePath, IProgress<HttpClientExtensions.HttpDownloadProgress> progress, CancellationToken cancellationToken)
     {
-        var response = await HttpClient.GetByteArrayAsync(audioUrl, progress, cancellationToken);
+        var response = await HttpClient.GetByteArrayAsync(new HttpRequestMessage
+        {
+            RequestUri = new Uri(audioUrl),
+            Method = HttpMethod.Get,
+            Headers =
+            {
+                {"Referer", $"https://www.bilibili.com/video/{videoId}"}
+            }
+        }, progress, cancellationToken);
         await using var fileStream = File.Create(filePath);
         await fileStream.WriteAsync(response, cancellationToken);
     }

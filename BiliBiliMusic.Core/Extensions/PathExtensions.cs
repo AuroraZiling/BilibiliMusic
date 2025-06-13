@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-
-namespace BiliBiliMusic.Extensions;
+﻿namespace BiliBiliMusic.Core.Extensions;
 
 public static class PathExtensions
 {

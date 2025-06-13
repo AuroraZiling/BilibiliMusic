@@ -4,22 +4,29 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
-using BiliBiliMusic.Extensions;
-using BiliBiliMusic.Helpers;
-using BiliBiliMusic.Models;
+using BiliBiliMusic.Core.Extensions;
+using BiliBiliMusic.Core.Helpers;
+using BiliBiliMusic.Core.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace BiliBiliMusic.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel(IStorageProvider storageProvider) : ObservableObject
 {
+    [ObservableProperty] public partial string Title { get; set; } = $"BiliBili Music {AssemblyHelper.GetAssemblyVersion()}";
     [ObservableProperty] public partial string ResolveUrl { get; set; } = "";
     [ObservableProperty] public partial string StoreFolderPath { get; set; } = "";
     [ObservableProperty] public partial string FileName { get; set; } = "";
     [ObservableProperty] public partial bool IsAutoFileName { get; set; } = true;
     [ObservableProperty] public partial string ResolveStatusDescription { get; set; } = "Fields seem invalid, please check.";
     [ObservableProperty] public partial ResolveStatus ResolveStatus { get; set; } = ResolveStatus.Validating;
+    
+    private void StatusUpdate(ResolveStatus newStatus, string newDescription)
+    {
+        ResolveStatus = newStatus;
+        ResolveStatusDescription = newDescription;
+    }
 
     #region Validation
     
@@ -30,46 +37,29 @@ public partial class MainWindowViewModel : ViewModelBase
         if(e.PropertyName is nameof(ResolveUrl) or nameof(StoreFolderPath) or nameof(FileName) or nameof(IsAutoFileName))
         {
             IsAllValid = false;
-            ResolveStatus = ResolveStatus.Validating;
-            ResolveStatusDescription = "Fields seem invalid, please check.";
+            StatusUpdate(ResolveStatus.Validating, "Fields seem invalid, please check.");
+            
             // Resolve URL
             if (string.IsNullOrEmpty(ResolveUrl))
-            {
-                ResolveStatus = ResolveStatus.Validating;
-                ResolveStatusDescription = "URL cannot be empty.";
-            }
+                StatusUpdate(ResolveStatus.Validating, "URL cannot be empty.");
             else if (!ResolveUrl.StartsWith("https://www.bilibili.com/video/"))
-            {
-                ResolveStatus = ResolveStatus.Validating;
-                ResolveStatusDescription = "Invalid BiliBili video URL: must start with 'https://www.bilibili.com/video/'.";
-            }
+                StatusUpdate(ResolveStatus.Validating, "Invalid BiliBili video URL: must start with 'https://www.bilibili.com/video/'.");
+
             // Store Folder Path
             else if (string.IsNullOrEmpty(StoreFolderPath))
-            {
-                ResolveStatus = ResolveStatus.Validating;
-                ResolveStatusDescription = "Folder Path cannot be empty.";
-            }
+                StatusUpdate(ResolveStatus.Validating, "Folder Path cannot be empty.");
             else if (!Path.Exists(StoreFolderPath))
-            {
-                ResolveStatus = ResolveStatus.Validating;
-                ResolveStatusDescription = "Folder Path not found.";
-            }
+                StatusUpdate(ResolveStatus.Validating, "Folder Path not found.");
+            
             // File Name
             else if (!IsAutoFileName && string.IsNullOrEmpty(FileName))
-            {
-                ResolveStatus = ResolveStatus.Validating;
-                ResolveStatusDescription = "File Name cannot be empty when Auto File Name is disabled.";
-            }
+                StatusUpdate(ResolveStatus.Validating, "File Name cannot be empty when Auto File Name is disabled.");
             else if (!IsAutoFileName && FileName.GetValidFileName() == null)
-            {
-                ResolveStatus = ResolveStatus.Validating;
-                ResolveStatusDescription = "Invalid File Name.";
-            }
+                StatusUpdate(ResolveStatus.Validating, "Invalid File Name.");
             else
             {
                 IsAllValid = true;
-                ResolveStatus = ResolveStatus.WaitForResolving;
-                ResolveStatusDescription = "Ready to resolve.";
+                StatusUpdate(ResolveStatus.WaitForResolving, "Ready to resolve.");
             }
         }
         base.OnPropertyChanged(e);
@@ -80,14 +70,12 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task Browse()
     {
-        var folderPath = await App.MainWindow.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        var folderPath = await storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
             AllowMultiple = false
         });
         if (folderPath.Count == 1)
-        {
             StoreFolderPath = folderPath[0].TryGetLocalPath() ?? "";
-        }
     }
 
     [RelayCommand]
@@ -150,8 +138,8 @@ public partial class MainWindowViewModel : ViewModelBase
                 ResolveStatusDescription = "Audio URL not found.";
                 return;
             }
-
-            var response = await BiliBiliHelper.TestConnection(audioUrl);
+            
+            var response = await BiliBiliHelper.TestConnection(audioUrl, videoId);
             if (!response)
             {
                 ResolveStatus = ResolveStatus.ResolveFailed;
@@ -163,6 +151,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             ResolveStatus = ResolveStatus.ResolveFailed;
             ResolveStatusDescription = $"Audio URL testing failed: {e.Message}";
+            return;
         }
         
         // Download
@@ -176,7 +165,7 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 ResolveStatusDescription = $"Downloading: {downloadProgress.BytesReceived} / {downloadProgress.TotalBytesToReceive} bytes";
             };
-            await BiliBiliHelper.DownloadAudioAsync(audioUrl!, Path.Combine(StoreFolderPath, fileNameWithExtension), progress, CancellationToken.None);
+            await BiliBiliHelper.DownloadAudioAsync(audioUrl, videoId, Path.Combine(StoreFolderPath, fileNameWithExtension), progress, CancellationToken.None);
             ResolveStatus = ResolveStatus.Downloaded;
             ResolveStatusDescription = $"Download completed: {fileName}";
         }

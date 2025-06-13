@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiliBiliMusic", "BiliBiliMusic\BiliBiliMusic.csproj", "{382A555F-8265-4A0A-94F9-3E73766ACDF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiliBiliMusic.Core", "BiliBiliMusic.Core\BiliBiliMusic.Core.csproj", "{93D9E9F9-BD93-4E3C-8408-2BD4A50AAE95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BilibiliMusic.Cli", "BilibiliMusic.Cli\BilibiliMusic.Cli.csproj", "{7AB9D895-668E-4E24-BDAD-69335C92A0B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{382A555F-8265-4A0A-94F9-3E73766ACDF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{382A555F-8265-4A0A-94F9-3E73766ACDF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{382A555F-8265-4A0A-94F9-3E73766ACDF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93D9E9F9-BD93-4E3C-8408-2BD4A50AAE95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93D9E9F9-BD93-4E3C-8408-2BD4A50AAE95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93D9E9F9-BD93-4E3C-8408-2BD4A50AAE95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93D9E9F9-BD93-4E3C-8408-2BD4A50AAE95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AB9D895-668E-4E24-BDAD-69335C92A0B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB9D895-668E-4E24-BDAD-69335C92A0B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB9D895-668E-4E24-BDAD-69335C92A0B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB9D895-668E-4E24-BDAD-69335C92A0B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
